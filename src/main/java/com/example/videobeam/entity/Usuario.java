@@ -1,12 +1,12 @@
 package com.example.videobeam.entity;
 
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "ob_usuario")
+@Table(name = "ob_usuario", uniqueConstraints = @UniqueConstraint(columnNames = "correo"))
 public class Usuario {
 
     @Id
@@ -15,18 +15,22 @@ public class Usuario {
     private String nombre;
     private String correo;
     private String clave;
-    private String rol;
+    private String telefono;
+    private boolean habilitado = false;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuario")
+    private Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
-    public Usuario(Long id, String nombre, String correo, String clave, String rol) {
+    public Usuario(Long id, String nombre, String correo, String clave, String telefono, boolean habilitado, Set<UsuarioRol> usuarioRoles) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
         this.clave = clave;
-        this.rol = rol;
+        this.telefono = telefono;
+        this.habilitado = habilitado;
+        this.usuarioRoles = usuarioRoles;
     }
 
     public Usuario() {
-
     }
 
     public Long getId() {
@@ -61,23 +65,28 @@ public class Usuario {
         this.clave = clave;
     }
 
-    public String getRol() {
-        return rol;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", correo='" + correo + '\'' +
-                ", clave='" + clave + '\'' +
-                ", rol='" + rol + '\'' +
-                '}';
+    public boolean isHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(boolean habilitado) {
+        this.habilitado = habilitado;
+    }
+
+    public Set<UsuarioRol> getUsuarioRoles() {
+        return usuarioRoles;
+    }
+
+    public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
+        this.usuarioRoles = usuarioRoles;
     }
 }
 
